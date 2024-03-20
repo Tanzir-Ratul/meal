@@ -13,16 +13,31 @@ class HomeFragment extends StatefulWidget {
 
 class _HomeFragmentState extends State<HomeFragment> {
   final _controller = Get.put(HomeController());
+  final FocusNode _focusNode = FocusNode();
 
-  final TextEditingController _searchController = TextEditingController();
   final double textFieldHeight = AppBar().preferredSize.height * 0.8; // Adjust the factor as needed
 
   @override
   void initState() {
     super.initState();
+    print("init state call");
     _controller.getSearchByNameApi(searchedName: "");
+    //_focusNode.unfocus();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+   // _focusNode.unfocus();
+    print("Onresume is called");
+   // FocusScope.of(context).unfocus();
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    _focusNode.unfocus();
+    //FocusScope.of(context).unfocus();
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -31,20 +46,21 @@ class _HomeFragmentState extends State<HomeFragment> {
               title:SizedBox(
                 height: textFieldHeight,
                 child: TextField(
-                    controller: _searchController,
+                    controller: _controller.searchController,
+                    focusNode: _focusNode,
                     decoration:  InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                       hintText: 'Search...',
                       alignLabelWithHint: true,
                       hintStyle: const TextStyle(color: Colors.white),
-                      focusedBorder: OutlineInputBorder(
+                      /*focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                           borderSide: const BorderSide(
                               color: Colors.amber,
                               width: 1
                           )
-                      ),
-                      enabledBorder: OutlineInputBorder(
+                      ),*/
+                      border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                           borderSide: const BorderSide(
                               color: Colors.amber,
@@ -61,8 +77,9 @@ class _HomeFragmentState extends State<HomeFragment> {
               actions: [
                 IconButton(onPressed: () {// Close the keyboard
                   FocusScope.of(context).unfocus();
-                  if(_searchController.text.isNotEmpty){
-                    _controller.getSearchByNameApi(searchedName: _searchController.text);
+                  if(_controller.searchController.text.isNotEmpty){
+                    _controller.getSearchByNameApi(searchedName: _controller.searchController.text);
+
                   }
                 }, icon: const Icon(Icons.search))
               ],

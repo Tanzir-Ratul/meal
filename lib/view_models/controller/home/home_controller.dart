@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:meal/data/response/status.dart';
 import 'package:meal/models/search_by_name/search_by_name.dart';
@@ -5,7 +6,7 @@ import 'package:meal/repository/homeRepository/home_repository.dart';
 
 class HomeController extends GetxController {
   final _repository = HomeRepository();
-
+  final TextEditingController searchController = TextEditingController();
   final rxRequestStatus = Status.LOADING.obs;
   final mealList = MealList().obs;
   RxString error = "".obs;

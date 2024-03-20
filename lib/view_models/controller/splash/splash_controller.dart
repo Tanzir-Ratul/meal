@@ -17,7 +17,7 @@ class SplashController extends GetxController{
   }
 
   startTime() async {
-    var duration = const Duration(seconds: 3);
+    var duration = const Duration(seconds: 1);
     return Timer(duration, navigateToBaseScreen);
   }
 
