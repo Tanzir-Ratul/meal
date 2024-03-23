@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meal/data/response/status.dart';
+import 'package:meal/models/search_by_name/search_by_name.dart';
 import 'package:meal/res/routes/routes_name.dart';
 import 'package:meal/view_models/controller/home/home_controller.dart';
 
@@ -102,8 +103,9 @@ class _HomeFragmentState extends State<HomeFragment> {
                           itemBuilder: (context, index) {
                             return InkWell(
                               onTap: () {
+                                 Meals? bundleData =  _controller.mealList.value.meals?[index];
                                 Get.toNamed(Routes.mealDetails,
-                                    arguments: _controller.mealList.value);
+                                    arguments: bundleData);
                               },
                               child: Card(
                                   child: ListTile(

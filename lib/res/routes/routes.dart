@@ -8,6 +8,6 @@ class AppPages {
   static final pages = [
     GetPage(name: Routes.initial, page: () => const SplashScreen()),
     GetPage(name: Routes.home, page: () => const HomeFragment()),
-    GetPage(name: Routes.mealDetails, page: () => const MealDetails()),
+    GetPage(name: Routes.mealDetails, page: () => MealDetails()),
   ];
 }
