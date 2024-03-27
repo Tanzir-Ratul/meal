@@ -14,7 +14,7 @@ class HomeFragment extends StatefulWidget {
 
 class _HomeFragmentState extends State<HomeFragment> {
   final _controller = Get.put(HomeController());
-  final FocusNode _focusNode = FocusNode();
+  // final FocusNode _focusNode = FocusNode();
 
   final double textFieldHeight = AppBar().preferredSize.height * 0.8; // Adjust the factor as needed
 
@@ -36,7 +36,7 @@ class _HomeFragmentState extends State<HomeFragment> {
   @override
   void dispose() {
     super.dispose();
-    _focusNode.unfocus();
+    // _focusNode.unfocus();
     //FocusScope.of(context).unfocus();
   }
   @override
@@ -48,7 +48,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                 height: textFieldHeight,
                 child: TextField(
                     controller: _controller.searchController,
-                    focusNode: _focusNode,
+                    // focusNode: _focusNode,
                     decoration:  InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                       hintText: 'Search...',
@@ -77,7 +77,8 @@ class _HomeFragmentState extends State<HomeFragment> {
               backgroundColor: Colors.blueAccent,
               actions: [
                 IconButton(onPressed: () {// Close the keyboard
-                  FocusScope.of(context).unfocus();
+                  // FocusScope.of(context).unfocus();
+                  FocusManager.instance.primaryFocus?.unfocus();
                   if(_controller.searchController.text.isNotEmpty){
                     _controller.getSearchByNameApi(searchedName: _controller.searchController.text);
 
@@ -112,20 +113,18 @@ class _HomeFragmentState extends State<HomeFragment> {
                                 title: _controller.mealList.value.meals?[index]
                                             ?.strMealThumb !=
                                         null
-                                    ? Expanded(
-                                        child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(10.0),
-                                            child: Image.network(
-                                              _controller.mealList.value
-                                                  .meals![index]!.strMealThumb
-                                                  .toString(),
-                                              fit: BoxFit.contain,
-                                              errorBuilder:
-                                                  (context, url, error) =>
-                                                      const Placeholder(),
-                                            )),
-                                      )
+                                    ? ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        child: Image.network(
+                                          _controller.mealList.value
+                                              .meals![index]!.strMealThumb
+                                              .toString(),
+                                          fit: BoxFit.contain,
+                                          errorBuilder:
+                                              (context, url, error) =>
+                                                  const Placeholder(),
+                                        ))
                                     : const Placeholder(),
                                 subtitle: Padding(
                                   padding: const EdgeInsets.all(8.0),

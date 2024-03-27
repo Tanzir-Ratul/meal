@@ -1,65 +1,85 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meal/models/search_by_name/search_by_name.dart';
 
-class MealDetails extends StatelessWidget {
-  MealDetails({super.key});
+class MealDetails extends StatefulWidget {
+  const MealDetails({super.key});
 
+  @override
+  State<MealDetails> createState() => _MealDetailsState();
+}
+
+class _MealDetailsState extends State<MealDetails> {
   Meals? meal;
-
+@override
+  void initState() {
+  meal = Get.arguments as Meals;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
     // Retrieve the passed argument
-    meal = Get.arguments as Meals;
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Details"),
-          backgroundColor: Colors.blueGrey,
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding:  EdgeInsets.fromLTRB(8, 8, 8, screenHeight * .1),
 
-            child: Card(
-              elevation: 5.0,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    textSpan(
-                        firstStr: "Meal Name: ", lastStr: "${meal?.strMeal}"),
-                     SizedBox(
-                      height: screenHeight * .01,
-                    ),
-                    textSpan(
-                        firstStr: "Ingredients and Measurements: ",
-                        lastStr: "${concatIngredients()}"),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    textSpan(
-                        firstStr: "Instructions: ",
-                        lastStr: "${meal?.strInstructions}"),
-                     SizedBox(
-                      height: screenHeight * .01,
-                    ),
-                  ],
+    return SafeArea(
+      child: PopScope(
+          canPop: true,
+          onPopInvoked:(value){
+            if (value) {
+              return;
+            }
+            Navigator.pop(context);
+            // return true;
+          },
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text("Details"),
+            backgroundColor: Colors.blueGrey,
+          ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding:  EdgeInsets.fromLTRB(8, 8, 8, screenHeight * .1),
+
+              child: Card(
+                elevation: 5.0,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      textSpan(
+                          firstStr: "Meal Name: ", lastStr: "${meal?.strMeal}"),
+                       SizedBox(
+                        height: screenHeight * .01,
+                      ),
+                      textSpan(
+                          firstStr: "Ingredients and Measurements: ",
+                          lastStr: "${concatIngredients()}"),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      textSpan(
+                          firstStr: "Instructions: ",
+                          lastStr: "${meal?.strInstructions}"),
+                       SizedBox(
+                        height: screenHeight * .01,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
+          floatingActionButton: FloatingActionButton.extended(
+              backgroundColor: Colors.blueGrey,
+              icon: const Icon(Icons.add),
+              label: const Text("Save to database"),
+              onPressed: () {}),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat
         ),
-        floatingActionButton: FloatingActionButton.extended(
-            backgroundColor: Colors.blueGrey,
-            icon: const Icon(Icons.add),
-            label: const Text("Save to database"),
-            onPressed: () {}),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat
       ),
     );
   }
@@ -134,8 +154,12 @@ class MealDetails extends StatelessWidget {
         (ingredient) => ingredient == null || ingredient.trim().isEmpty);
     measureItemList
         .removeWhere((element) => element == null || element.trim().isEmpty);
-    print("ingredientsList  $ingredientsList");
-    print("measureItemList  $measureItemList");
+    if (kDebugMode) {
+      print("ingredientsList  $ingredientsList");
+    }
+    if (kDebugMode) {
+      print("measureItemList  $measureItemList");
+    }
     String? concatAll = "";
     for (int i = 0; i < ingredientsList.length; i++) {
       if (ingredientsList[i] != null && measureItemList[i] != null) {
@@ -147,7 +171,9 @@ class MealDetails extends StatelessWidget {
             "$concatAll${i + 1}. ${ingredientsList[i]} (${measureItemList[i]})";
       }
     }
-    print("fellow  $concatAll");
+    if (kDebugMode) {
+      print("fellow  $concatAll");
+    }
     return concatAll;
   }
 }
